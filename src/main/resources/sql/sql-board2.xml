@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.board2.mapper.Board2Mapper">
+  <select id="selectBoard2List" resultType="com.bitc.board2.dto.Board2Dto">
+    <![CDATA[
+    SELECT
+      board_idx, title, create_id, create_date, hit_cnt
+    FROM
+      board
+    WHERE
+      deleted_yn = 'N'
+    ORDER BY board_idx DESC
+    ]]>
+  </select>
+  
+  <insert id="board2Insert" parameterType="com.bitc.board2.dto.Board2Dto">
+    <![CDATA[
+    INSERT INTO
+      board (title, contents, create_id, create_date)
+    VALUES
+      (#{title}, #{contents}, #{createId}, NOW())
+    ]]>
+  </insert>
+
+  <update id="board2UpdateHitCnt" parameterType="int">
+    <![CDATA[
+    UPDATE
+      board
+    SET
+      hit_cnt = hit_cnt + 1
+    WHERE
+      board_idx = #{boardIdx}
+    ]]>
+  </update>
+
+  <select id="selectBoard2Detail" parameterType="int" resultType="com.bitc.board2.dto.Board2Dto">
+    <![CDATA[
+    SELECT
+      board_idx, title, contents, create_id, create_date, update_id, update_date, hit_cnt
+    FROM
+      board
+    WHERE
+      board_idx = #{boardIdx}
+      AND
+      deleted_yn = 'N'
+    ]]>
+  </select>
+
+  <update id="board2Update" parameterType="com.bitc.board2.dto.Board2Dto">
+    <![CDATA[
+    UPDATE
+      board
+    SET
+      title = #{title}, contents = #{contents}, update_id = #{updateId}, update_date = NOW()
+    WHERE
+      board_idx = #{boardIdx}
+      AND
+      deleted_yn = 'N'
+    ]]>
+  </update>
+
+  <delete id="board2Delete" parameterType="int">
+    <![CDATA[
+    UPDATE
+      board
+    SET
+      deleted_yn = 'Y'
+    WHERE
+      board_idx = #{boardIdx}
+    ]]>
+  </delete>
+</mapper>
